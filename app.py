@@ -6,6 +6,10 @@ import configparser
 import pandas as pd
 
 
+def setup_wizard():
+    bot_name = input("Name your bot: ")
+
+
 def setup():
     # if os.path.exists("./scraper.ini"):
     #     print("Found necessary files, starting scraper.")
@@ -18,13 +22,15 @@ def setup():
 
     config['DEFAULT']['path'] = os.path.join(os.path.abspath,'scraper.py')
     print(f"Creating {config['DEFAULT']['path']}")
+    bot_name = input("Name your bot: ")
+
     cfg = [
-        "bot_name=thematic_scraper",
-        "bot_version=2.2.0",
-        "bot_author=da_Nif7y",
-        "client_id=QSz7vgteaO2JfsiHZNz0ng",
-        "client_secret=VIw3QpFtpPpH0xPIetYugfVcPaLeUg",
-        "user_agent=%(bot_name)s:v%(bot_version)s (by u/%(bot_author)s)"
+        "thematic_scraper",
+        "2.2.0",
+        "da_Nif7y",
+        "QSz7vgteaO2JfsiHZNz0ng",
+        "VIw3QpFtpPpH0xPIetYugfVcPaLeUg",
+        "%(bot_name)s:v%(bot_version)s (by u/%(bot_author)s)"
     ]
 
     with open('scraper.ini', 'w') as cf:
@@ -34,7 +40,7 @@ def setup():
 def scrape():
     reddit = praw.Reddit(client_id="SHbwgSsuYfVDbEQtWWCxGA", client_secret="dDU3odgce1SLIwKWJV9qd284GcKoog",
                        user_agent="Scuzzydude", timeout = 59)
-    comments = 0
+    replies = 0
     posts = []
     ml_subreddit = reddit.subreddit('australia')
     for post in ml_subreddit.search(query="indigenous voice", sort="top", time_filter="year", limit=10):
@@ -52,7 +58,7 @@ def scrape():
         # posts.append(["~~~~~~~", "~~~~~~~", "~~~~~~~", "~~~~~~~", "~~~~~~~","~~~~~~~", "~~~~~~~" ])
     posts = pd.DataFrame(posts, columns=['title_of_parent', 'updoots', 'id', 'author', 'num_comments/parent_comment', 'content', 'date_created', 'url'])
 
-    print(f"posts found: {len(posts)}\ncomments from posts:{comments}")
+    print(f"Posts found: {len(posts)}\nComments from posts:{replies}")
 
     # posts.to_csv('australia_top_indigvoi_top102.csv', encoding='utf-8', index=False)
 
